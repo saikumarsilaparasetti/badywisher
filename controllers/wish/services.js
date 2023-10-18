@@ -1,5 +1,6 @@
 const logger = require("../../logger");
 const { WishModel } = require("../../models");
+const wishModel = require("../../models/wishModel");
 
 const services = {
   createObject: async (wish) => {
@@ -14,6 +15,15 @@ const services = {
   aggregate: async (pipeline) => {
     try {
       return await WishModel.aggregate(pipeline);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(error.message);
+    }
+  },
+
+  findOneByQuery: async (query) => {
+    try {
+      return await WishModel.findOne(query);
     } catch (error) {
       logger.error(error);
       throw new Error(error.message);
@@ -38,6 +48,14 @@ const services = {
         .limit(parseInt(pageSize))
         .lean()
         .exec();
+    } catch (error) {
+      logger.error(error);
+      throw new Error(error.message);
+    }
+  },
+  update: async (filter, update) => {
+    try {
+      return await wishModel.findOneAndUpdate(filter, update, { new: true });
     } catch (error) {
       logger.error(error);
       throw new Error(error.message);

@@ -21,6 +21,16 @@ const wishSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  subject: {
+    type: String,
+  },
+  images: {
+    type: [String],
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const wishModel = mongoose.model("wish", wishSchema);

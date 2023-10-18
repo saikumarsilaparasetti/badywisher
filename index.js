@@ -3,21 +3,27 @@ const mongoose = require("mongoose");
 const path = require("path");
 const bodyparser = require("body-parser");
 const cors = require("cors");
+require("dotenv").config();
 
 const logger = require("./logger");
 
 const app = express();
+const cron = require("node-cron");
+const { wishController } = require("./controllers");
+
+// ss mm hh dd mm yy
+cron.schedule("00 58 19 * * *", () => {
+  logger.info("cron check--");
+  wishController.checkAndWish();
+});
 
 const port = process.env.PORT || 3000;
 const route = require("./routes");
-mongoose.connect("mongodb://localhost:27017/bdaywisher", {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-// mongoose.connect(
-//   "mongodb+srv://saikumar:saikumar21@cluster0.kxdfx.mongodb.net/SGAcc_db?retryWrites=true&w=majority",
-//   { useNewUrlParser: true, useUnifiedTopology: true }
-// );
+
 mongoose.connection.on("connected", () => {
   logger.info("Connected to database");
 });
